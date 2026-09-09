@@ -82,23 +82,23 @@ public:
         this->mass = mass;
     }
 
-    double ImpulseCalculation(double before_vel, Normal normal);
+    double ImpulseCalculation(double before_vel, Normal normal){
+        double delta_vel = before_vel;
+        if(restitution != 0.0){
+            double after_vel = restitution * before_vel;
+            delta_vel = after_vel - before_vel;
+        }
+        double impulse = 0.0;
+        if (normal.x == 0){
+            impulse = mass * delta_vel * normal.y;
+        }
+        else{
+            impulse = mass * delta_vel * normal.x;
+        }
+        return impulse;
+
+    }
 
 };
-
-double Collision::ImpulseCalculation(double before_vel, Normal normal){
-    double delta_vel = before_vel;
-    if(restitution != 0.0){
-        double after_vel = restitution * before_vel;
-        delta_vel = after_vel - before_vel;
-    }
-    double impulse = 0.0;
-    if (normal.x == 0){
-        impulse = mass * delta_vel * normal.y;
-    }
-    else{
-        impulse = mass * delta_vel * normal.x;
-    }
-    return impulse;
-}
+    
 #endif
