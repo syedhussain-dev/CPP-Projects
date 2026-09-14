@@ -19,6 +19,15 @@ public:
         shape.setSize(size);
         shape.setPosition(position);
     }
+
+    void move(sf::Vector2f new_pose){
+        
+    }
+
+    void resize(){
+
+    }
+
     void draw(sf::RenderWindow& window){
         window.draw(shape);
     }
@@ -89,7 +98,24 @@ public:
 };
 
 class Teleports{
+private:
+    sf::Vector2f size;
+    sf::Vector2f position;
+    sf::Color fill;
+    sf::Color outline;
 
+public:
+    sf::RectangleShape shape;
+    Teleports(sf::Vector2f size, sf::Vector2f position, sf::Color fill, sf::Color outline){
+        this->size = size;
+        this->position = position;
+        this->fill = fill;
+        this-> outline = outline;
+    }
+
+    void draw(sf::RenderWindow& window){
+        window.draw(shape);
+    }
 };
 
 #endif
