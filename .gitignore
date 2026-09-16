@@ -1,12 +1,8 @@
-# Executable and O files
-*.o
-*.exe
-
 # VS Code
 .vscode/
 
 # Temporary files
 *tempcodeRunnerFile.cpp
 
-*.dll
-Makefile
+# Build folders
+/build
