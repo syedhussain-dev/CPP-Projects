@@ -1,6 +1,7 @@
 #include <torch/torch.h>
 #include <optional>
 #include <list>
+#include <cassert>
 #include <cmath>
 
 class ModelArgs{
@@ -38,8 +39,19 @@ struct RMSNorm : torch::nn::Module{
 
 std::list<torch::Tensor> precompute_freqs_cis(int64_t dim, int64_t end, double_t theta = 10000.0){
     torch::Tensor freqs = 1.0 / torch::pow(theta, torch::arange(0,dim,2,torch::kFloat32) / dim);
+    torch::Tensor t = torch::arange(end).to(freqs.device());
+    freqs = torch::outer(t,freqs).to(torch::kFloat32);
+    torch::Tensor freqs_cos = torch::cos(freqs);
+    torch::Tensor freqs_sin = torch::sin(freqs);
+    return std::list<torch::Tensor>{freqs_cos, freqs_sin};
 }
 
+torch::Tensor reshape_for_broadcast(torch::Tensor freqs_cis, torch::Tensor x){
+    int64_t ndim = x.ndimension();
+    assert(1 < ndim);
+    assert(freqs_cis.size(0) == x.size(1) && freqs_cis.size(1) == x.size(-1));
+    
+}
 struct Attention : torch::nn::Module{
     Attention(ModelArgs args){
         if(args.num_kv_heads.has_value()){
