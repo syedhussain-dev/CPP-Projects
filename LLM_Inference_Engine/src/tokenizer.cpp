@@ -1,4 +1,9 @@
-#include "include/tokenizer.h"
+#include "tokenizer.h"
+#include <regex>
+#include <fstream>
+#include <algorithm>
+#include <filesystem>
+#include <iostream>
 std::string TOKENIZER_MODEL = "tokenizer.model";
 
 Tokenizer::Tokenizer(std::optional<std::string> tokenizer_model=std::nullopt){

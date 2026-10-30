@@ -3,13 +3,17 @@
 #include <map>
 #include <string>
 #include <utility>
-#include <cmath>
+#include "text_dataset.h"
+#include "model.h"
+
+using DatasetType = torch::data::datasets::MapDataset<TextDataset,torch::data::transforms::Stack<>>;
+using DataLoaderType = torch::data::StatelessDataLoader<DatasetType,torch::data::samplers::RandomSampler>;
 
 torch::Tensor train(
-    torch::nn::Module& model,
-    torch::Tensor train_dataloader,
-    torch::Tensor val_dataloader,
-    torch::Tensor test_dataloader,
+    Transformer& model,
+    std::unique_ptr<DataLoaderType> train_dataloader,
+    std::unique_ptr<DataLoaderType> val_dataloader,
+    std::unique_ptr<DataLoaderType> test_dataloader,
     int epochs, int divisor,
     std::string device,
     torch::optim::AdamW& optimiser,
@@ -19,18 +23,18 @@ torch::Tensor train(
     std::string target_dir,
     int vocab_size,
     int accum_steps,
-    double_t grad_clip=1.0
+    double grad_clip=1.0
 );
 
-int detect_overfitting(
-    std::map<std::string,std::vector<double_t>> results,
+void detect_overfitting(
+    std::map<std::string,std::vector<double>> results,
     int epoch,
     int& overfit_counter
 );
 
-std::pair<double_t,int> stagnation(
-    double_t current_loss,
-    double_t best_loss,
+std::pair<double,int> stagnation(
+    double current_loss,
+    double best_loss,
     int epochs_no_imp
 );
 
