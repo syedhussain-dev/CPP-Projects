@@ -1,3 +1,6 @@
+#ifndef MODEL_H
+#define MODEL_H
+
 #include <ATen/ops/scaled_dot_product_attention.h>
 #include <cstdint>
 #include <torch/nn/modules/dropout.h>
@@ -102,3 +105,5 @@ struct Transformer : torch::nn::Module{
     torch::Tensor freqs_cos;
     torch::Tensor freqs_sin;
 };
+
+#endif

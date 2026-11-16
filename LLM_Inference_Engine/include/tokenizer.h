@@ -1,9 +1,10 @@
+#ifndef TOKENIZER_H
+#define TOKENIZER_H
+
 #include <string>
 #include <optional>
 #include <vector>
-
 #include <sentencepiece_processor.h>
-
 
 class Tokenizer{
 public:
@@ -22,3 +23,5 @@ private:
     void checkPath(std::string& model_path);
 
 };
+
+#endif

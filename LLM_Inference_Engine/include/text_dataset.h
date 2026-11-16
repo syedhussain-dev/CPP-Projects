@@ -1,3 +1,6 @@
+#ifndef TEXT_DATASET_H
+#define TEXT_DATASET_H
+
 #include <torch/data/datasets/base.h>
 #include <torch/torch.h>
 
@@ -12,3 +15,5 @@ struct TextDataset : torch::data::datasets::Dataset<TextDataset>{
     torch::Tensor tokens;
     int64_t seq_len;
 };
+
+#endif

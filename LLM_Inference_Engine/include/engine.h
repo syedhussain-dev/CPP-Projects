@@ -1,8 +1,10 @@
+#ifndef ENGINE_h
+#define ENGINE_H
+
 #include <torch/optim/schedulers/lr_scheduler.h>
 #include <torch/torch.h>
 #include <map>
 #include <string>
-#include <utility>
 #include "text_dataset.h"
 #include "model.h"
 
@@ -27,14 +29,16 @@ torch::Tensor train(
 );
 
 void detect_overfitting(
-    std::map<std::string,std::vector<double>> results,
-    int epoch,
+    std::map<std::string,std::vector<double>>& results,
+    int& epoch,
     int& overfit_counter
 );
 
-std::pair<double,int> stagnation(
-    double current_loss,
-    double best_loss,
-    int epochs_no_imp
+void stagnation(
+    double& current_loss,
+    double& best_loss,
+    int& epochs_no_imp
 );
+
+#endif
 

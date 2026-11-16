@@ -6,7 +6,7 @@
 #include <iostream>
 std::string TOKENIZER_MODEL = "tokenizer.model";
 
-Tokenizer::Tokenizer(std::optional<std::string> tokenizer_model=std::nullopt){
+Tokenizer::Tokenizer(std::optional<std::string> tokenizer_model){
     /*
     Constructor of the class. If a tokenizer model is specified then it's used
     else the tokenizer model file is used. The path is checked for validation
@@ -43,7 +43,7 @@ void Tokenizer::checkPath(std::string& model_path){
     @param model_path: The model path to the tokenizer provided
     */
     try{
-        std::filesystem::path checkPath = model_path;
+        std::filesystem::path checkPath(model_path.c_str());
         if(std::filesystem::is_regular_file(checkPath)){
             std::cout << "Tokenizer model path exists";
         }
