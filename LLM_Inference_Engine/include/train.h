@@ -1,5 +1,5 @@
-#ifndef ENGINE_h
-#define ENGINE_H
+#ifndef TRAIN_H
+#define TRAIN_H
 
 #include <torch/optim/schedulers/lr_scheduler.h>
 #include <torch/torch.h>

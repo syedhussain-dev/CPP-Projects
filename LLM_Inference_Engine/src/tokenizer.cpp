@@ -1,8 +1,7 @@
 #include "tokenizer.h"
-#include <regex>
+#include <cstdint>
 #include <fstream>
 #include <algorithm>
-#include <filesystem>
 #include <iostream>
 std::string TOKENIZER_MODEL = "tokenizer.model";
 
@@ -22,7 +21,8 @@ Tokenizer::Tokenizer(std::optional<std::string> tokenizer_model){
     else{
         model_path = TOKENIZER_MODEL;
     }
-    checkPath(model_path);
+    std::filesystem::path checking_path = model_path;
+    checkPath(checking_path);
     const auto status = processor.Load(model_path);
     if(!status.ok()){
         std::cerr << status.ToString() << std::endl;
@@ -35,7 +35,7 @@ Tokenizer::Tokenizer(std::optional<std::string> tokenizer_model){
 
 }
 
-void Tokenizer::checkPath(std::string& model_path){
+void Tokenizer::checkPath(std::filesystem::path& checkPath){
     /*
     This method checks the model path given. Error thrown
     if model path is invalid
@@ -43,7 +43,7 @@ void Tokenizer::checkPath(std::string& model_path){
     @param model_path: The model path to the tokenizer provided
     */
     try{
-        std::filesystem::path checkPath(model_path.c_str());
+        
         if(std::filesystem::is_regular_file(checkPath)){
             std::cout << "Tokenizer model path exists";
         }
@@ -56,7 +56,7 @@ void Tokenizer::checkPath(std::string& model_path){
 std::vector<int> Tokenizer::encode(std::string s, bool bos, bool eos){
     std::vector<int> t = processor.EncodeAsIds(s);
     if(bos){
-        t.push_back(bos_id);
+        t.insert(t.begin(),bos_id);
     }
     if(eos){
         t.push_back(eos_id);
@@ -64,7 +64,7 @@ std::vector<int> Tokenizer::encode(std::string s, bool bos, bool eos){
     return t;
 }
 
-std::string Tokenizer::decode(std::vector<int> t){
+std::string Tokenizer::decode(const std::vector<int>& t){
     return processor.DecodeIds(t);
 }
 
@@ -92,7 +92,7 @@ void Tokenizer::exporter(){
             max_token_length = t.size();
         }
     }
-    std::string tokenizer_bin = std::regex_replace(model_path, std::regex(".model"), ".bin");
+    std::string tokenizer_bin = std::filesystem::path(model_path).replace_extension(".bin").string();
     std::ofstream outfile(tokenizer_bin, std::ios::out | std::ios::binary);
     if(!outfile){
         std::cerr << "Error: Could not open file for writing" << std::endl;

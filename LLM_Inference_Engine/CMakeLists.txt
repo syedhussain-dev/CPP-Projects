@@ -20,11 +20,19 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(sentencepiece)
 
 add_executable(llm_engine
- src/tokenizer.cpp
+    src/tokenizer.cpp
+    src/engine.cpp
+    src/train.cpp
+    src/text_dataset.cpp
+    src/model.cpp
+    src/utils.cpp
 )
+add_dependencies(llm_engine generate_installed_headers)
 target_include_directories(llm_engine PRIVATE
     "C:/Users/LENOVO/AppData/Local/Programs/Python/Python313/Lib/site-packages/torch/include"
     "C:/Users/LENOVO/AppData/Local/Programs/Python/Python313/Lib/site-packages/torch/include/torch/csrc/api/include"
+    "${sentencepiece_BINARY_DIR}/src/installed_headers"
+    "${sentencepiece_SOURCE_DIR}/third_party/abseil-cpp"
 )
 
 target_link_libraries(llm_engine PRIVATE
